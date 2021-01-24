@@ -1,5 +1,5 @@
 // select data
-var select_tag = d3.select('#selDaraset');
+var select_tag = d3.select('#selDataset');
 
 d3.json('samples.json').then((importedData) => {
 
@@ -32,7 +32,7 @@ function optionChanged(selected_id) {
         console.log('samples:  ');
         console.log(samples);
 
-        var results = results[0];
+        var result = results[0];
 
         console.log('results:   ');
         console.log(results);
@@ -47,7 +47,7 @@ function optionChanged(selected_id) {
         var y_label = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
     
         console.log("y_label  ");
-        console.log(y_labe);
+        console.log(y_label);
 
         console.log('sample_values: ');
         console.log(sample_values.slice(0, 10).reverse());
@@ -55,7 +55,7 @@ function optionChanged(selected_id) {
         var bar_trace = {
 
             y: y_label,
-            x: samples_values.slice(0, 10).reverse(),
+            x: sample_values.slice(0, 10).reverse(),
             text: otu_labels.slice(0, 10).reverse(),
             type: "bar",
             orientation: 'h',
@@ -65,7 +65,7 @@ function optionChanged(selected_id) {
 
         var bar_layout = {
 
-            title: 'Top 10 OTUs'
+            title: 'Top 10 OTUs',
             margin: {t:30, 1:150}
         };
 
@@ -73,7 +73,7 @@ function optionChanged(selected_id) {
 
     //create bubble chart
 
-    var results = samples.filter(sampleObj) => sampleObj.id == selected_id;
+    var results = samples.filter(sampleObj => sampleObj.id == selected_id);
     var results = results[0];
 
     var otu_ids = result.otu_ids;
@@ -106,5 +106,32 @@ function optionChanged(selected_id) {
 
     });
 
+// demographics chart
 
+d3.json('samples.json').then((data) => {
+
+    var metadata = data.metadata;
+
+    console.log('metadata');
+    console.log(metadata);
+
+    var results = metadata.filter(metadataObj => metadataObj.id == selected_id);
+    var result = results[0];
+
+    console.log('resuts');
+    console.log(results[0]);
+
+    console.log('result');
+    console.log(result);
+
+    var fig = d3.select('#sample-metadata');
+
+    fig.html('');
+
+    Object.entries(results[0]).forEach(([key, value]) => {
+
+        fig.append('h5').text(`${key}: ${value}`);
+    });
+    
+});
 }
