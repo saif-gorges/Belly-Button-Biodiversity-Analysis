@@ -1,47 +1,53 @@
+// select data
+var select_tag = d3.select('#selDaraset');
 
-  // 1. Create the buildCharts function.
-  function buildCharts(sample) {
-    // 2. Use d3.json to load and retrieve the samples.json file 
-    d3.json("samples.json").then((data) => {
-        console.log(data)
+d3.json('samples.json').then((importedData) => {
 
-      // 3. Create a variable that holds the samples array. 
+    var subject_ids = importedData.names;
 
-    var values = unpack(data.samples.sample_values, 3);
-    var labels = unpack(data.samples.otu_ids, 1);
-    var hoverText = unpack(data.samples.otu_labels, 2);
+    console.log('Subject_ids')
+    console.log(subject_ids)
+
+    subject_ids.forEach((id) => {
+
+        select_tag
+        .append("option")
+        .property('value', id)
+        .text(id)
+    });
+
+//load first name 940
+optionChanged(subject_ids[0]);
+});
+
+//select user innput and filter json data
+function optionChanged(selected_id) {
+    console.log('selected_id', selected_id);
+
+    d3.json('samples.json').then((data) => {
+
+        var samples = data.samples;
+        var results = samples.filter(sampleObj => sampleObj.id == selected_id);
+
+        console.log('samples:  ');
+        console.log(samples);
+
+        var results = results[0];
+
+        console.log('results:   ');
+        console.log(results);
+
+        console.log('result  ');
+        console.log(result);
+
+        var otu_ids = result.otu_ids;
+        var otu_labels = result.otu_labels;
+        var sample_values = result.sample_values;
+
+        var y_label = otu_ids.slice(0, 10).map(otuID => 'OTU ${otuID}').reverse();
     
-    console.log(values)
-    console.log(labels)
-    console.log(hoverText)
+    
+    })
 
-    });
-}; 
 
-retreiveData();
-      // 4. Create a variable that filters the samples for the object with the desired sample number.
-  
-      //  5. Create a variable that holds the first sample in the array.
-  
-  
-      // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-  
-  
-      // 7. Create the yticks for the bar chart.
-      // Hint: Get the the top 10 otu_ids and map them in descending order  
-      //  so the otu_ids with the most bacteria are last. 
-  
-      var yticks = 
-  
-      // 8. Create the trace for the bar chart. 
-      var barData = [
-        
-      ];
-      // 9. Create the layout for the bar chart. 
-      var barLayout = {
-       
-      };
-      // 10. Use Plotly to plot the data with the layout. 
-      
-    });
-  }
+}
